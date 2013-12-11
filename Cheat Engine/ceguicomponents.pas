@@ -14,100 +14,7 @@ uses
   ComponentEditors, CEListviewItemEditor, TreeViewPropEdit, menus, MenuIntf, LCLProc;
 
 type TCEPageControl=class(TPageControl);
-
-type TCETreeview=class(TTreeview)
-  property Align;
-  property Anchors;
-  property AutoExpand;
-  property BorderSpacing;
-  //property BiDiMode;
-  property BackgroundColor;
-  property BorderStyle;
-  property BorderWidth;
-  property Color;
-  property Constraints;
-  property DefaultItemHeight;
-  property DragKind;
-  property DragCursor;
-  property DragMode;
-  //property Enabled;
-  property ExpandSignType;
-  property Font;
-  property HideSelection;
-  property HotTrack;
-  //property Images;
-  property Indent;
-  property MultiSelect;
-  property MultiSelectStyle;
-  //property ParentBiDiMode;
-  property ParentColor default False;
-  property ParentFont;
-  property ParentShowHint;
-  property PopupMenu;
-  property ReadOnly;
-  property RightClickSelect;
-  property RowSelect;
-  property ScrollBars;
-  property SelectionColor;
-  property ShowButtons;
-  property ShowHint;
-  property ShowLines;
-  property ShowRoot;
-  property SortType;
-  property StateImages;
-  property TabOrder;
-  property TabStop default True;
-  property Tag;
-  property ToolTips;
-  property Visible;
-  //property OnAddition;
-  //property OnAdvancedCustomDraw;
-  //property OnAdvancedCustomDrawItem;
-  //property OnChange;
-  //property OnChanging;
-  property OnClick;
-  //property OnCollapsed;
-  //property OnCollapsing;
-  //property OnCompare;
-  //property OnContextPopup;
-  //property OnCreateNodeClass;
-  //property OnCustomCreateItem;
-  //property OnCustomDraw;
-  //property OnCustomDrawItem;
-  property OnDblClick;
-  //property OnDeletion;
-  //property OnDragDrop;
- // property OnDragOver;
-  //property OnEdited;
-  //property OnEditing;
-  //property OnEditingEnd;
-  //property OnEndDock;
-  //property OnEndDrag;
-  property OnEnter;
-  property OnExit;
-  //property OnExpanded;
-  //property OnExpanding;
-  //property OnGetImageIndex;
-  //property OnGetSelectedIndex;
-  property OnKeyDown;
-  property OnKeyPress;
-  property OnKeyUp;
-  property OnMouseDown;
-  property OnMouseEnter;
-  property OnMouseLeave;
-  property OnMouseMove;
-  property OnMouseUp;
-  property OnSelectionChanged;
-  //property OnShowHint;
-  //property OnStartDock;
-  //property OnStartDrag;
-  //property OnUTF8KeyPress;
-  property Options;
-  property Items;
-  property TreeLineColor;
-  property TreeLinePenStyle;
-  property ExpandSignColor;
-end;
+type TCETreeview=class(TTreeview);
 
 type TCESplitter=class(TCustomSplitter)
   property Align;
@@ -1452,14 +1359,31 @@ begin
   end;
 end;
 
-procedure TCEForm.paint;
+procedure TCEFvar i: integer;
+begin
+  self.Menu:=nil;
+aint;
 begin
   inherited paint;
 
   if active then
   begin
     if color<>clDefault then
-      DesignPaintGrid(Canvas, ClientRect, ColorToRGB(color), InvertColor(ColorToRGB(color)))
+      DesignPaintGrid(
+  self.BeginFormUpdate;
+  i:=0;
+  while i<ComponentCount do
+    components[i].Free;
+
+  i:=0;
+  while i<ControlCount do
+    Controls[i].Free;
+
+
+
+
+  self.EndFormUpdate;
+d(Canvas, ClientRect, ColorToRGB(color), InvertColor(ColorToRGB(color)))
     else
       DesignPaintGrid(Canvas, ClientRect);
   end;
@@ -1496,13 +1420,15 @@ begin
 
   RegisterClass(TCEPageControl);
   RegisterClass(TTabSheet);
-  RegisterClass(TMainMenu);rC  RegisterClass(TMenuItem);rCla
+  RegisterClass(TMainMenu);rC  RegisterClass(TPopupMenu);
+  RegisterClass(TMenuItem);
+rCla
   RegisterClass(tceform);
 
 
   RegisterPropertyEditor(ClassTypeInfo(TListItems), TCEListView, 'Items', TCEListViewItemsPropertyEditor);
 
-  //RegisterComponentEditor(TCEListView, TListViewComponentEditor);
-
+  //Hide some properties (mainly for the newer objects that have been introduced since 6.4+)
+  //example:   RegisterPropertyEditor(TypeInfo(TNotifyEvent), TCEButton, 'OnClick', THiddenPropertyEditor);
 end.
 
