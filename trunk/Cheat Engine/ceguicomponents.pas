@@ -1008,7 +1008,6 @@ begin
     if active=false then
       RestoreToDesignState; //it was disabled so change it to the saved state if possible and edit from there
 
-
     OwnerFormDesignerModifiedProc:=ModifiedCheck;
 
 
@@ -1407,6 +1406,8 @@ begin
 
 
 
+
+
   self.EndFormUpdate;
 d(Canvas, ClientRect, ColorToRGB(color), InvertColor(ColorToRGB(color)))
     else
@@ -1448,7 +1449,7 @@ begin
   RegisterClass(TMainMenu);rC  RegisterClass(TPopupMenu);
   RegisterClass(TMenuItem);
   RegisterClass(TCalendar);
-
+  RegisterClass(TFindDialog);
 rCla
   RegisterClass(tceform);
 
