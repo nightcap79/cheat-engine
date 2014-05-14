@@ -1452,6 +1452,7 @@ begin
   RegisterClass(TMenuItem);
   RegisterClass(TCalendar);
   RegisterClass(TFindDialog);
+  RegisterClass(TSelectDirectoryDialog);
 rCla
   RegisterClass(tceform);
 
