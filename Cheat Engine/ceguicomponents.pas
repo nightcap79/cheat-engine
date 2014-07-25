@@ -596,6 +596,7 @@ type TCEEdit=class(TCustomEdit)
 
 type TCEForm=class(TCustomForm)
   private
+    saving: boolean;
     fVisible: boolean;
     saveddesign: TMemorystream;
     fDoNotSaveInTable: boolean;
@@ -616,6 +617,7 @@ type TCEForm=class(TCustomForm)
     procedure LoadFromXML(Node: TDOMNode);
     procedure RestoreToDesignState;
     procedure SaveCurrentStateasDesign;
+    function getVisible:boolean;
     procedure setVisible(state: boolean);
     destructor destroy; override;
 
@@ -700,7 +702,7 @@ type TCEForm=class(TCustomForm)
     property ShowInTaskBar;
   //  property UseDockManager;
  //   property LCLVersion: string read FLCLVersion write FLCLVersion stored LCLVersionIsStored;
-    property Visible read fVisible write setVisible;
+    property Visible read getVisible write setVisible;
     property WindowState;
 
     property DoNotSaveInTable: boolean read fDoNotSaveInTable write fDoNotSaveInTable default False;
@@ -1171,7 +1173,13 @@ begin
     savedDesign:=Tmemorystream.create;
 
   savedDesign.size:=0;
-  WriteComponentAsBinaryToStreamWithMethods(savedDesign);
+  saving:=true;
+  try
+    WriteComponentAsBinaryToStreamWithMethods(savedDesign);
+  finally
+    saving:=false;
+  end;
+
 
   savedDesign.position:=0;
 
@@ -1193,7 +1201,7 @@ var doc: TXMLDocument;
   size: dword;
 
  { a85: TASCII85EncoderStream;
-  a85buffer: TStringStream;
+  a85buffer: T TStringStream;
   s: string;   }
 
   a: TDOMAttr;
@@ -1204,7 +1212,7 @@ begin
 
   if saveddesign=nil then exit; //nothing to save
 
-  //for now use a binarystream instead of xml. the xmlwriter/reader does not support stringlists
+  //for now use a binarystream instead of xml. the xmlwriter/reader does not susupport stringlists
   //create a stream for storage
   outputastext:=nil;
   try
@@ -1392,6 +1400,13 @@ begin
 
     LoadFromXML(formnode);
     ResyncWithLua;
+ function TCEForm.getVisible:boolean;
+begin
+  if active or saving then
+    result:=fVisible
+  else
+    result:=Inherited visible;
+ithLua;
  procedure TCEForm.setVisible(state: boolean);
 begin
   fVisible:=state;
